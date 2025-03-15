@@ -15,7 +15,7 @@ pipeline{
         }
         stage ('checkout SCM') {
             steps {
-                git 'https://github.com/etaoko333/DevSecOps-CI-CD-Pipeline-pet-store.git'
+                git 'https://github.com/etaoko333/Pipeline-pet-store.git'
             }
         }
         stage ('Compiling Maven Code') {
