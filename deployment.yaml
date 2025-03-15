@@ -16,7 +16,7 @@ spec:
       - name: petshop
         image: priyanshu18/petshop:latest
         ports:
-        - containerPort: 8080
+        - containerPort: 8081
         imagePullPolicy: Always
 ---
 apiVersion: v1
@@ -31,4 +31,4 @@ spec:
   - name: http
     protocol: TCP
     port: 80
-    targetPort: 8080
+    targetPort: 8081
