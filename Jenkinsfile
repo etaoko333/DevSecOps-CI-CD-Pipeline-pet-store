@@ -15,7 +15,7 @@ pipeline{
         }
         stage ('checkout SCM') {
             steps {
-                git 'https://github.com/priyanshu-bhatt/DevSecOps-CI-CD-Pipeline.git'
+                git 'https://github.com/etaoko333/DevSecOps-CI-CD-Pipeline-pet-store.git'
             }
         }
         stage ('Compiling Maven Code') {
@@ -59,25 +59,25 @@ pipeline{
             steps{
                 script{
                     withDockerRegistry(credentialsId: 'docker', toolName: 'docker') {
-                        sh "docker build -t priyanshu18/petshop:${BUILD_TAG} ."
-                        sh "docker push priyanshu18/petshop:${BUILD_TAG}"
+                        sh "docker build -t sholly333/petshop:${BUILD_TAG} ."
+                        sh "docker push sholly333/petshop:${BUILD_TAG}"
                    }
                 }
             }
         }
         stage("Image Scanning using TRIVY"){
             steps{
-                sh "trivy image priyanshu18/petshop:${BUILD_TAG} > trivy.txt"
+                sh "trivy image sholly333/petshop:${BUILD_TAG} > trivy.txt"
             }
         }
                 stage('QA testing Stage'){
             steps{
                 sh 'docker rm -f qacontainer'
-                sh 'docker run -d --name qacontainer -p 8080:8080 priyanshu18/petshop:latest'
+                sh 'docker run -d --name qacontainer -p 80:80 sholly333/petshop:latest'
                 sleep time: 60, unit: 'SECONDS'
                 retry(10){
                 
-                sh 'curl --silent http://3.110.124.24:8080/jpetstore/ | grep JPetStore'
+                sh 'curl --silent http://3.110.124.24:80/jpetstore/ | grep JPetStore'
                 }
                 //testing curl
                 
