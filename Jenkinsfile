@@ -39,9 +39,9 @@ pipeline {
                 }
             }
         }
-        stage('SonarQube Quality Gate') {
+        stage("Quality Gate") {
             steps {
-                script {
+                timeout(time: 1, unit: 'HOURS') {
                     waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token'
                 }
             }
