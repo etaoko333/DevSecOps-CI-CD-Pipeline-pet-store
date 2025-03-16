@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: tomcat-jpetstore
-        image: sholly333/tomcat-jpetstore:${BUILD_TAG}
+        image: sholly333/tomcat-jpetstore:${BUILD_TAG}  # Jenkins will substitute BUILD_TAG here
         ports:
         - containerPort: 8080
 ---
