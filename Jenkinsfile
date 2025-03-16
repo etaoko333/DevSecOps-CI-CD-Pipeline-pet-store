@@ -74,7 +74,7 @@ pipeline {
         }
         stage('QA Testing Stage') {
             steps {
-                sh 'docker rm -f qacontainer'
+                sh 'docker rm -f qacontainer || true'
                 sh 'docker run -d --name qacontainer -p 80:80 sholly333/petshop:latest'
                 sleep time: 60, unit: 'SECONDS'
                 retry(10) {
@@ -82,23 +82,21 @@ pipeline {
                 }
             }
         }
-    }
-}
-stage('K8s-Deploy') {
+        stage('K8s-Deploy') {
             steps {
-                withKubeConfig(caCertificate: '', clusterName: 'devopsola-cluster', contextName: '', credentialsId: 'k8-cred', namespace: 'webapps', restrictKubeConfigAccess: false, serverUrl: 'https://C237C0103DF0D7B349ED061646E2EF7E.gr7.us-west-1.eks.amazonaws.com') {
+                withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'devopsola-cluster', contextName: '', credentialsId: 'k8-token', namespace: 'petshop-app', serverUrl: 'https://6521CDD4D3810B9D5BC7BA558F523321.gr7.us-west-1.eks.amazonaws.com']]) {
                     sh "kubectl apply -f deployment-service.yml"
                     sleep 20
                 }
             }
         }
-
         stage('Verify Deployment') {
             steps {
-                withKubeConfig(caCertificate: '', clusterName: 'devopsola-cluster', contextName: '', credentialsId: 'k8-cred', namespace: 'webapps', restrictKubeConfigAccess: false, serverUrl: 'https://C237C0103DF0D7B349ED061646E2EF7E.gr7.us-west-1.eks.amazonaws.com') {
+                withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'devopsola-cluster', contextName: '', credentialsId: 'k8-token', namespace: 'petshop-app', serverUrl: 'https://6521CDD4D3810B9D5BC7BA558F523321.gr7.us-west-1.eks.amazonaws.com']]) {
                     sh "kubectl get pods"
                     sh "kubectl get service"
                 }
             }
         }
-    } //
+    }
+}
