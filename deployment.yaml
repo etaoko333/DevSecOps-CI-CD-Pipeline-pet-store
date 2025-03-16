@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: tomcat-jpetstore
-          image: sholly333/tomcat-jpetstore:jenkins-Petshop-App-12
+          image: sholly333/tomcat-jpetstore:jenkins-Petshop-App-15
           ports:
             - containerPort: 8080
 ---
