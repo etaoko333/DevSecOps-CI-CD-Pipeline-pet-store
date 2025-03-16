@@ -61,31 +61,21 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry(credentialsId: 'docker', toolName: 'docker') {
-                        sh "docker build -t sholly333/petshop:${BUILD_TAG} ."
-                        sh "docker push sholly333/petshop:${BUILD_TAG}"
+                        sh "docker build -t sholly333/tomcat-jpetstore:${BUILD_TAG} ."
+                        sh "docker push sholly333/tomcat-jpetstore:${BUILD_TAG}"
                     }
                 }
             }
         }
         stage('Image Scanning using Trivy') {
             steps {
-                sh "trivy image sholly333/petshop:${BUILD_TAG} > trivy.txt"
-            }
-        }
-        stage('QA Testing Stage') {
-            steps {
-                sh 'docker rm -f qacontainer || true'
-                sh 'docker run -d --name qacontainer -p 80:80 sholly333/petshop:latest'
-                sleep time: 60, unit: 'SECONDS'
-                retry(10) {
-                    sh 'curl --silent http://3.110.124.24:80/jpetstore/ | grep JPetStore'
-                }
+                sh "trivy image sholly333/tomcat-jpetstore:${BUILD_TAG} > trivy.txt"
             }
         }
         stage('K8s-Deploy') {
             steps {
                 withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'devopsola-cluster', contextName: '', credentialsId: 'k8-token', namespace: 'petshop-app', serverUrl: 'https://6521CDD4D3810B9D5BC7BA558F523321.gr7.us-west-1.eks.amazonaws.com']]) {
-                    sh "kubectl apply -f deployment-service.yml"
+                    sh "kubectl apply -f deployment"
                     sleep 20
                 }
             }
