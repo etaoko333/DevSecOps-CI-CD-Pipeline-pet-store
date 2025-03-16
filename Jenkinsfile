@@ -15,7 +15,7 @@ pipeline {
         }
         stage('Checkout SCM') {
             steps {
-                git 'https://github.com/etaoko333/Pipeline-pet-store.git'
+                git 'https://github.com/etaoko333/Petshop-App.git'
             }
         }
         stage('Compiling Maven Code') {
