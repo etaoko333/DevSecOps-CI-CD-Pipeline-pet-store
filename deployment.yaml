@@ -16,7 +16,7 @@ spec:
       - name: petshop
         image: priyanshu18/petshop:latest
         ports:
-        - containerPort: 80810
+        - containerPort: 8080
         imagePullPolicy: Always
 ---
 apiVersion: v1
